@@ -23,8 +23,8 @@ buildscript {
         maven {
           url = uri("https://maven.pkg.github.com/adster-tech/orchestration-sdk")
           credentials {
-            username = 'GIRIRAJNAGAR768'
-            password = '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'
+            username = 'akshatgoyal276'
+            password = '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'
           }
         }}
     }
