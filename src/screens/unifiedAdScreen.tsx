@@ -125,6 +125,12 @@ export const UnifiedAdScreen = ({
             showToastMessage('Unified Ad impression');
             setToastMessages((prev) => [...prev, msg]);
           }}
+          onAdRevenuePaid={(event: UnifiedAdEvent) => {
+            const msg = event.nativeEvent.message;
+            const revenue = event.nativeEvent.revenue;
+            console.log('Unified Ad Revenue Paid: '+ revenue, msg);
+            showToastMessage('Unified Ad Revenue Paid');
+          }}
         >
           {/* Native layout */}
           <View style={styles.nativeAdContainer}>

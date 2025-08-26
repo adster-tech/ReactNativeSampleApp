@@ -51,6 +51,11 @@ export const InterstitialAdScreen = ({
             showToastMessage(message);
             setToastMessages(prev => [...prev, message]);
             break;
+          case EInterstitialAdEventType.onAdRevenuePaid:
+            console.log('Ad Revenue Paid '+ event.revenue);
+            showToastMessage('Interstitial Ad Revenue Paid '+ event.revenue);
+            setToastMessages(prev => [...prev, message]);
+            break;
           case EInterstitialAdEventType.onAdOpened:
             console.log(message);
             showToastMessage(message);

@@ -101,6 +101,13 @@ export const BannerAdScreen = ({
             showToastMessage('Banner Ad impression');
             setToastMessages((prev) => [...prev, message]);
           }}
+          onAdRevenuePaid={(event: BannerAdEvent) => {
+            const msg = event.nativeEvent.message;
+            const revenue = event.nativeEvent.revenue;
+            console.log('Native Ad Impression:'+revenue, msg);
+            showToastMessage('Native Ad impression');
+            setToastMessages((prev) => [...prev, msg]);
+          }}
         />
 
         {loadError && (

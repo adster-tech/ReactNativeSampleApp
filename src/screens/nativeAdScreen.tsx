@@ -113,6 +113,12 @@ export const NativeAdScreen = ({
             showToastMessage('Native Ad impression');
             setToastMessages((prev) => [...prev, msg]);
           }}
+          onAdRevenuePaid={(event: NativeAdEvent) => {
+            const msg = event.nativeEvent.message;
+            const revenue = event.nativeEvent.revenue;
+            console.log('Native Ad Revenue Paid: '+revenue, msg);
+            showToastMessage('Native Ad Revenue Paid');
+          }}
         >
           <View style={styles.nativeAdContainer}>
             <View style={styles.iconHeadingRow}>

@@ -53,6 +53,11 @@ export const RewardedAdScreen = ({
             showToastMessage('Rewarded Ad impression');
             setToastMessages(prev => [...prev, message]);
             break;
+          case ERewardedAdEventType.onAdRevenuePaid:
+            console.log('Ad Revenue Paid '+ event.revenue);
+            showToastMessage('Rewarded Ad Revenue Paid '+ event.revenue);
+            setToastMessages(prev => [...prev, message]);
+            break;
           case ERewardedAdEventType.onUserEarnedReward:
             console.log('User Earned Reward');
             showToastMessage('Rewarded Ad User Earned Reward: ' + reward);
