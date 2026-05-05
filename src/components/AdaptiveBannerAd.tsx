@@ -9,7 +9,7 @@ import {
 import {
   BannerAdEvent,
   BannerAdView,
-} from 'adster-react-native-client';
+} from 'razorpay-ads-react-native';
 import { samplePlacementNames } from '../constants/adPlacements';
 
 interface Props extends ViewProps {

@@ -11,10 +11,10 @@ import {
 import {Header} from '../components/header';
 import {NavigationProp} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
-import Adster, {
+import Razorpay, {
   EAdEvent,
   ERewardedAdEventType,
-} from 'adster-react-native-client';
+} from 'razorpay-ads-react-native';
 import {showToastMessage} from '../utils/showToastMessage';
 import {Button} from '../components/button';
 import {PlacementInfo} from '../components/PlacementInfo';
@@ -104,7 +104,7 @@ export const RewardedAdScreen = ({
       // setLoadingRewardedAd(true);
       setToastMessages([]);
       logPlacementRequest('Rewarded', placementName);
-      await Adster.loadRewardedAd(placementName);
+      await Razorpay.loadRewardedAd(placementName);
     } catch (error) {
       console.log('loadRewardedAd: Error', error);
     } finally {
@@ -114,7 +114,7 @@ export const RewardedAdScreen = ({
 
   const showRewardedAd = async () => {
     setToastMessages([]);
-    Adster.showRewardedAd()
+    Razorpay.showRewardedAd()
       .then(() => {})
       .catch((error: unknown) => {
         console.log('Error in showRewardedAd', error);

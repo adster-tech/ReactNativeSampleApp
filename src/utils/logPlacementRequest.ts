@@ -1,3 +1,3 @@
 export const logPlacementRequest = (format: string, placement: string) => {
-  console.log(`[Adster Sample] ${format} placement: ${placement}`);
+  console.log(`[Razorpay Sample] ${format} placement: ${placement}`);
 };

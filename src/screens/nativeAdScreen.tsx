@@ -19,7 +19,7 @@ import {
   IconView,
   AdvertiserView,
   CallToActionView,
-} from 'adster-react-native-client';
+} from 'razorpay-ads-react-native';
 import { showToastMessage } from '../utils/showToastMessage';
 import { Button } from '../components/button';
 import { PlacementInfo } from '../components/PlacementInfo';

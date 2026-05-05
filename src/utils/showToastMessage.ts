@@ -10,5 +10,5 @@ export const showToastMessage = (message: string) => {
     return;
   }
 
-  console.log('[Adster Sample Toast]', message);
+  console.log('[Razorpay Sample Toast]', message);
 };

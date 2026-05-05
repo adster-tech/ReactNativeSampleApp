@@ -11,10 +11,10 @@ import {
 import {Header} from '../components/header';
 import {NavigationProp} from '@react-navigation/native';
 import {Button} from '../components/button';
-import Adster, {
+import Razorpay, {
   EAdEvent,
   EInterstitialAdEventType,
-} from 'adster-react-native-client';
+} from 'razorpay-ads-react-native';
 import {useEffect, useState} from 'react';
 import {showToastMessage} from '../utils/showToastMessage';
 import {PlacementInfo} from '../components/PlacementInfo';
@@ -92,7 +92,7 @@ export const InterstitialAdScreen = ({
       // setLoadingInterstitialAd(true);
       setToastMessages([]);
       logPlacementRequest('Interstitial', placementName);
-      await Adster.loadInterstitialAd(placementName);
+      await Razorpay.loadInterstitialAd(placementName);
     } catch (error) {
       console.log('loadInterstitialAdLoaded: Error', error);
     } finally {
@@ -102,7 +102,7 @@ export const InterstitialAdScreen = ({
 
   const showInterstitialAd = async () => {
     setToastMessages([]);
-    Adster.showInterstitialAd()
+    Razorpay.showInterstitialAd()
       .then(() => {})
       .catch((error: unknown) => {
         console.log('Error in showInterstitialAd', error);

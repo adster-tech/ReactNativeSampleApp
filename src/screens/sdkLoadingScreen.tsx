@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Adster from 'adster-react-native-client';
+import Razorpay from 'razorpay-ads-react-native';
 import {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
@@ -20,7 +20,7 @@ export const SdkLoadingScreen = ({
 
   const initializeSDK = async () => {
     try {
-      await Adster.initializeSDK();
+      await Razorpay.initializeSDK();
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
