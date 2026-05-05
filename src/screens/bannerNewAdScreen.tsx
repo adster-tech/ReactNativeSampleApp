@@ -1,6 +1,6 @@
 // File: js/screens/BannerNewAdScreen.tsx
 
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,21 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import { Header } from '../components/header';
 import { NavigationProp } from '@react-navigation/native';
-import { BannerAdEvent, BannerAdView } from 'adster-react-native-client';
+import {
+  BannerAdEvent,
+  BannerAdView,
+} from 'adster-react-native-client';
 import { showToastMessage } from '../utils/showToastMessage';
 import { Button } from '../components/button';
+import { PlacementInfo } from '../components/PlacementInfo';
+import { logPlacementRequest } from '../utils/logPlacementRequest';
+import { samplePlacementNames } from '../constants/adPlacements';
+
+const bannerPlacementName = samplePlacementNames.banner300x250;
 
 export const BannerNewAdScreen = ({
   navigation,
@@ -43,6 +52,10 @@ export const BannerNewAdScreen = ({
     resetAndReload();
   }, [resetAndReload]);
 
+  useEffect(() => {
+    logPlacementRequest('Banner 300x250', bannerPlacementName);
+  }, [adKey]);
+
   return (
     <View style={styles.container}>
       <Header
@@ -58,11 +71,12 @@ export const BannerNewAdScreen = ({
         }
       >
         {loading && <ActivityIndicator size="large" color="#0000ff" />}
+        <PlacementInfo format="Banner 300x250" placement={bannerPlacementName} />
 
         <BannerAdView
           key={`banner-new-${adKey}`}
           bannerContainerStyle={styles.bannerContainer}
-          placementName="Adster_Banner_New"
+          placementName={bannerPlacementName}
           onAdLoaded={(event: BannerAdEvent) => {
             const message = event.nativeEvent.message;
             showToastMessage('Banner Ad loaded successfully');
@@ -92,7 +106,7 @@ export const BannerNewAdScreen = ({
           onAdRevenuePaid={(event: BannerAdEvent) => {
             const msg = event.nativeEvent.message;
             const revenue = event.nativeEvent.revenue;
-            console.log('Banner Ad Revenue Paid: '+ revenue, msg);
+            console.log('Banner Ad Revenue Paid: ' + revenue, msg);
             showToastMessage('Banner Ad Revenue Paid');
           }}
         />
@@ -124,8 +138,8 @@ const styles = StyleSheet.create({
   },
   bannerContainer: {
     marginVertical: 20,
-    width: 300,
-    height: 250,
+    width: Platform.OS === 'ios' ? 300 : 320,
+    height: Platform.OS === 'ios' ? 250 : 50,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'green',

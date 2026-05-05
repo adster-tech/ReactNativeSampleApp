@@ -17,6 +17,9 @@ import { RootStackParamList } from '../navigation/RootNavigation';
 import { Header } from '../components/header';
 import { AdaptiveBannerAd } from '../components/AdaptiveBannerAd';
 import { showToastMessage } from '../utils/showToastMessage';
+import { PlacementInfo } from '../components/PlacementInfo';
+import { logPlacementRequest } from '../utils/logPlacementRequest';
+import { samplePlacementNames } from '../constants/adPlacements';
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -25,20 +28,27 @@ type Props = NativeStackScreenProps<
 
 // compute once: screen width in dp
 const screenWidthDp = Dimensions.get('window').width / PixelRatio.get();
+const iosAdaptiveBannerWidth = 320;
+const iosAdaptiveBannerHeight = 50;
 
 export default function AdaptiveBannerAdScreen({
   route,
   navigation,
 }: Props) {
   const initialMode = route.params?.mode ?? 'anchored';
-  const [mode, setMode] = useState<'inline' | 'anchored'>(initialMode);
-  const placementId = 'adaptive_banner_test';
+  const [mode, setMode] = useState<'inline' | 'anchored' | 'orientation'>(
+    initialMode,
+  );
+  const placementId = samplePlacementNames.adaptiveBanner;
+  const placementName = placementId;
   const inlineWidthDp = mode === 'inline' ? 320 : undefined;
 
   // banner state
   const [height, setHeight] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const resolvedHeight =
+    height || (Platform.OS === 'ios' ? iosAdaptiveBannerHeight : 0);
 
   // refresh controls
   const [refreshing, setRefreshing] = useState(false);
@@ -57,6 +67,10 @@ export default function AdaptiveBannerAdScreen({
     }
   }, [mode, bannerKey]);
 
+  useEffect(() => {
+    logPlacementRequest(`Adaptive Banner (${mode})`, placementName);
+  }, [bannerKey, mode, placementName]);
+
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
     setLoaded(false);
@@ -74,11 +88,18 @@ export default function AdaptiveBannerAdScreen({
     <View
       style={[
         styles.adWrapper,
-        mode === 'inline' && {
-          width: `${(inlineWidthDp! / screenWidthDp) * 100}%`,
+        Platform.OS === 'ios' && {
+          width: iosAdaptiveBannerWidth,
           alignSelf: 'center',
         },
-        { height },
+        mode === 'inline' && {
+          width:
+            Platform.OS === 'ios'
+              ? iosAdaptiveBannerWidth
+              : `${(inlineWidthDp! / screenWidthDp) * 100}%`,
+          alignSelf: 'center',
+        },
+        { height: resolvedHeight },
       ]}
     >
       <AdaptiveBannerAd
@@ -86,7 +107,10 @@ export default function AdaptiveBannerAdScreen({
         placementId={placementId}
         mode={mode}
         inlineWidthDp={inlineWidthDp}
-        style={{ width: '100%', height }}
+        style={{
+          width: Platform.OS === 'ios' ? iosAdaptiveBannerWidth : '100%',
+          height: resolvedHeight,
+        }}
         onAdLoaded={(e) => {
           const msg = 'Adaptive Ad loaded successfully';
           const impressionMsg = 'Adaptive Ad Impression';
@@ -127,11 +151,21 @@ export default function AdaptiveBannerAdScreen({
       </View>
 
       {/* Anchored ad at top */}
-      {mode === 'anchored' && position === 'top' && renderBanner()}
+      {mode === 'anchored' && position === 'top' && (
+        <View style={styles.anchoredTopBannerContainer}>{renderBanner()}</View>
+      )}
 
       {/* Scrollable content */}
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={[
+          styles.container,
+          mode === 'anchored' && position === 'top'
+            ? styles.containerWithTopAnchoredBanner
+            : null,
+          mode === 'anchored' && position === 'bottom'
+            ? styles.containerWithBottomAnchoredBanner
+            : null,
+        ]}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -139,6 +173,10 @@ export default function AdaptiveBannerAdScreen({
           />
         }
       >
+        <PlacementInfo
+          format={`Adaptive Banner (${mode})`}
+          placement={placementName}
+        />
         {!loaded && !error && <ActivityIndicator style={styles.spinner} />}
         {error && <Text style={styles.errorText}>{error}</Text>}
 
@@ -154,7 +192,11 @@ export default function AdaptiveBannerAdScreen({
       </ScrollView>
 
       {/* Anchored ad at bottom */}
-      {mode === 'anchored' && position === 'bottom' && renderBanner()}
+      {mode === 'anchored' && position === 'bottom' && (
+        <View style={styles.anchoredBottomBannerContainer}>
+          {renderBanner()}
+        </View>
+      )}
     </View>
   );
 }
@@ -173,6 +215,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 24,
   },
+  containerWithTopAnchoredBanner: {
+    paddingTop: Platform.OS === 'ios' ? 170 : 150,
+  },
+  containerWithBottomAnchoredBanner: {
+    paddingBottom: Platform.OS === 'ios' ? 110 : 90,
+  },
   spinner: {
     marginTop: 20,
   },
@@ -181,6 +229,22 @@ const styles = StyleSheet.create({
     overflow: 'visible',
     marginTop: 16,
     minHeight: 50,
+  },
+  anchoredTopBannerContainer: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 92 : 80,
+    left: 0,
+    right: 0,
+    zIndex: 5,
+    alignItems: 'center',
+  },
+  anchoredBottomBannerContainer: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 24 : 16,
+    left: 0,
+    right: 0,
+    zIndex: 5,
+    alignItems: 'center',
   },
   errorText: {
     color: 'red',

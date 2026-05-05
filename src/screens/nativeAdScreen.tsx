@@ -1,6 +1,6 @@
 // File: js/screens/NativeAdScreen.tsx
 
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -19,16 +19,19 @@ import {
   IconView,
   AdvertiserView,
   CallToActionView,
-  testPlacementNames,
 } from 'adster-react-native-client';
 import { showToastMessage } from '../utils/showToastMessage';
 import { Button } from '../components/button';
+import { PlacementInfo } from '../components/PlacementInfo';
+import { logPlacementRequest } from '../utils/logPlacementRequest';
+import { samplePlacementNames } from '../constants/adPlacements';
 
 export const NativeAdScreen = ({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) => {
+  const placementName = samplePlacementNames.native;
   // State
   const [loadError, setLoadError] = useState(false);
   const [toastMessages, setToastMessages] = useState<string[]>([]);
@@ -53,6 +56,10 @@ export const NativeAdScreen = ({
     resetAndReload();
   }, [resetAndReload]);
 
+  useEffect(() => {
+    logPlacementRequest('Native', placementName);
+  }, [adKey, placementName]);
+
   return (
     <View style={styles.container}>
       <Header
@@ -75,10 +82,11 @@ export const NativeAdScreen = ({
         {loading && (
           <ActivityIndicator size="large" color="#0000ff" />
         )}
+        <PlacementInfo format="Native" placement={placementName} />
 
         <NativeAdView
           key={`native-${adKey}`}
-          placementName={testPlacementNames.native}
+          placementName={placementName}
           style={styles.nativeAdWrapper}
           onNativeAdLoaded={(event: NativeAdEvent) => {
             const msg = event.nativeEvent.message;

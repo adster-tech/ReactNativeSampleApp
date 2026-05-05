@@ -1,6 +1,6 @@
 // File: js/screens/BannerAdScreen.tsx
 
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,16 +14,19 @@ import { NavigationProp } from '@react-navigation/native';
 import {
   BannerAdEvent,
   BannerAdView,
-  testPlacementNames,
 } from 'adster-react-native-client';
 import { showToastMessage } from '../utils/showToastMessage';
 import { Button } from '../components/button';
+import { PlacementInfo } from '../components/PlacementInfo';
+import { logPlacementRequest } from '../utils/logPlacementRequest';
+import { samplePlacementNames } from '../constants/adPlacements';
 
 export const BannerAdScreen = ({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) => {
+  const placementName = samplePlacementNames.banner;
   // track errors & toast messages
   const [loadError, setLoadError] = useState(false);
   const [toastMessages, setToastMessages] = useState<string[]>([]);
@@ -48,6 +51,10 @@ export const BannerAdScreen = ({
     resetAndReload();
   }, []);
 
+  useEffect(() => {
+    logPlacementRequest('Banner', placementName);
+  }, [adKey, placementName]);
+
   return (
     <View style={styles.container}>
       <Header
@@ -63,11 +70,12 @@ export const BannerAdScreen = ({
         }
       >
         {loading && <ActivityIndicator size="large" color="#0000ff" />}
+        <PlacementInfo format="Banner" placement={placementName} />
 
         <BannerAdView
           key={`banner-${adKey}`}
           bannerContainerStyle={styles.bannerContainer}
-          placementName={testPlacementNames.banner}
+          placementName={placementName}
           onAdLoaded={(event: BannerAdEvent) => {
             const message = event.nativeEvent.message;
             console.log('Ad loaded:', message);
@@ -104,7 +112,7 @@ export const BannerAdScreen = ({
           onAdRevenuePaid={(event: BannerAdEvent) => {
             const msg = event.nativeEvent.message;
             const revenue = event.nativeEvent.revenue;
-            console.log('Native Ad Impression:'+revenue, msg);
+            console.log('Native Ad Impression:' + revenue, msg);
             showToastMessage('Native Ad impression');
             setToastMessages((prev) => [...prev, msg]);
           }}
@@ -137,8 +145,8 @@ const styles = StyleSheet.create({
   },
   bannerContainer: {
     marginVertical: 20,
-    width: '90%',
-    height: 280,
+    width: 320,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'green',

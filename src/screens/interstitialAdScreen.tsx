@@ -1,6 +1,9 @@
 import {
   ActivityIndicator,
   DeviceEventEmitter,
+  NativeEventEmitter,
+  NativeModules,
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -11,22 +14,30 @@ import {Button} from '../components/button';
 import Adster, {
   EAdEvent,
   EInterstitialAdEventType,
-  testPlacementNames,
 } from 'adster-react-native-client';
 import {useEffect, useState} from 'react';
 import {showToastMessage} from '../utils/showToastMessage';
+import {PlacementInfo} from '../components/PlacementInfo';
+import {logPlacementRequest} from '../utils/logPlacementRequest';
+import {samplePlacementNames} from '../constants/adPlacements';
+
+const interstitialEventEmitter =
+  Platform.OS === 'ios'
+    ? new NativeEventEmitter(NativeModules.InterstitialAdModule)
+    : DeviceEventEmitter;
 
 export const InterstitialAdScreen = ({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) => {
+  const placementName = samplePlacementNames.interstitial;
   const [loadingInterstitialAd, setLoadingInterstitialAd] = useState(false);
   const [toastMessages, setToastMessages] = useState<string[]>([]);
 
   //Event Listener for Interstitial Ad
   useEffect(() => {
-    const onAdEvent = DeviceEventEmitter.addListener(
+    const onAdEvent = interstitialEventEmitter.addListener(
       EAdEvent.InterstitialAdEvent,
       event => {
         const {event: eventType, message, error} = event;
@@ -49,11 +60,6 @@ export const InterstitialAdScreen = ({
           case EInterstitialAdEventType.onAdImpression:
             console.log(message);
             showToastMessage(message);
-            setToastMessages(prev => [...prev, message]);
-            break;
-          case EInterstitialAdEventType.onAdRevenuePaid:
-            console.log('Ad Revenue Paid '+ event.revenue);
-            showToastMessage('Interstitial Ad Revenue Paid '+ event.revenue);
             setToastMessages(prev => [...prev, message]);
             break;
           case EInterstitialAdEventType.onAdOpened:
@@ -85,7 +91,8 @@ export const InterstitialAdScreen = ({
     try {
       // setLoadingInterstitialAd(true);
       setToastMessages([]);
-      await Adster.loadInterstitialAd(testPlacementNames.interstitial);
+      logPlacementRequest('Interstitial', placementName);
+      await Adster.loadInterstitialAd(placementName);
     } catch (error) {
       console.log('loadInterstitialAdLoaded: Error', error);
     } finally {
@@ -97,7 +104,7 @@ export const InterstitialAdScreen = ({
     setToastMessages([]);
     Adster.showInterstitialAd()
       .then(() => {})
-      .catch(error => {
+      .catch((error: unknown) => {
         console.log('Error in showInterstitialAd', error);
         showToastMessage('Error in showInterstitialAd' + error);
         setToastMessages(prev => [
@@ -119,6 +126,7 @@ export const InterstitialAdScreen = ({
         }}
       />
       <View style={styles.viewContainer}>
+        <PlacementInfo format="Interstitial" placement={placementName} />
         {loadingInterstitialAd && (
           <ActivityIndicator size="large" color="#0000ff" />
         )}

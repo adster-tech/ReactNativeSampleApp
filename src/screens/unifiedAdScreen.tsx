@@ -1,6 +1,6 @@
 // File: js/screens/UnifiedAdScreen.tsx
 
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,6 @@ import { NavigationProp } from '@react-navigation/native';
 import {
   UnifiedAdView,
   UnifiedAdEvent,
-  testPlacementNames,
   IconView,
   HeadlineView,
   BodyView,
@@ -23,12 +22,16 @@ import {
 } from 'adster-react-native-client';
 import { showToastMessage } from '../utils/showToastMessage';
 import { Button } from '../components/button';
+import { PlacementInfo } from '../components/PlacementInfo';
+import { logPlacementRequest } from '../utils/logPlacementRequest';
+import { samplePlacementNames } from '../constants/adPlacements';
 
 export const UnifiedAdScreen = ({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) => {
+  const placementName = samplePlacementNames.unified;
   // state
   const [loadError, setLoadError] = useState(false);
   const [toastMessages, setToastMessages] = useState<string[]>([]);
@@ -54,6 +57,10 @@ export const UnifiedAdScreen = ({
     resetAndReload();
   }, [resetAndReload]);
 
+  useEffect(() => {
+    logPlacementRequest('Unified', placementName);
+  }, [adKey, placementName]);
+
   return (
     <View style={styles.container}>
       <Header
@@ -76,10 +83,11 @@ export const UnifiedAdScreen = ({
         {loading && (
           <ActivityIndicator size="large" color="#0000ff" />
         )}
+        <PlacementInfo format="Unified" placement={placementName} />
 
         <UnifiedAdView
           key={`unified-${adKey}`}
-          placementName={testPlacementNames.unified}
+          placementName={placementName}
           nativeContainerStyle={styles.nativeAdWrapperContainer}
           bannerContainerStyle={styles.bannerContainer}
           style={styles.unifiedAdStyle}

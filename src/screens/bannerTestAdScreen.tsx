@@ -1,6 +1,6 @@
 // File: js/screens/BannerTestAdScreen.tsx
 
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -11,15 +11,22 @@ import {
 } from 'react-native';
 import { Header } from '../components/header';
 import { NavigationProp } from '@react-navigation/native';
-import { BannerAdEvent, BannerAdView } from 'adster-react-native-client';
+import {
+  BannerAdEvent,
+  BannerAdView,
+} from 'adster-react-native-client';
 import { showToastMessage } from '../utils/showToastMessage';
 import { Button } from '../components/button';
+import { PlacementInfo } from '../components/PlacementInfo';
+import { logPlacementRequest } from '../utils/logPlacementRequest';
+import { samplePlacementNames } from '../constants/adPlacements';
 
 export const BannerTestAdScreen = ({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) => {
+  const placementName = samplePlacementNames.banner320x50;
   const [loadError, setLoadError] = useState(false);
   const [toastMessages, setToastMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,6 +46,10 @@ export const BannerTestAdScreen = ({
     setRefreshing(true);
     resetAndReload();
   }, [resetAndReload]);
+
+  useEffect(() => {
+    logPlacementRequest('Banner 320x50', placementName);
+  }, [adKey, placementName]);
 
   return (
     <View style={styles.container}>
@@ -65,11 +76,12 @@ export const BannerTestAdScreen = ({
             color="#0000ff"
           />
         )}
+        <PlacementInfo format="Banner 320x50" placement={placementName} />
 
         <BannerAdView
           key={`banner-${adKey}`}
           bannerContainerStyle={styles.bannerContainer}
-          placementName="Adster_Banner_Test"
+          placementName={placementName}
           onAdLoaded={(event: BannerAdEvent) => {
             const { message } = event.nativeEvent;
             showToastMessage('Banner Ad loaded successfully');
@@ -102,7 +114,7 @@ export const BannerTestAdScreen = ({
           onAdRevenuePaid={(event: BannerAdEvent) => {
             const msg = event.nativeEvent.message;
             const revenue = event.nativeEvent.revenue;
-            console.log('Banner Ad Revenue Paid: '+ revenue, msg);
+            console.log('Banner Ad Revenue Paid: ' + revenue, msg);
             showToastMessage('Banner Ad Revenue Paid');
           }}
         />

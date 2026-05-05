@@ -1,6 +1,9 @@
 import {
   ActivityIndicator,
   DeviceEventEmitter,
+  NativeEventEmitter,
+  NativeModules,
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -11,22 +14,30 @@ import {useEffect, useState} from 'react';
 import Adster, {
   EAdEvent,
   ERewardedAdEventType,
-  testPlacementNames,
 } from 'adster-react-native-client';
 import {showToastMessage} from '../utils/showToastMessage';
 import {Button} from '../components/button';
+import {PlacementInfo} from '../components/PlacementInfo';
+import {logPlacementRequest} from '../utils/logPlacementRequest';
+import {samplePlacementNames} from '../constants/adPlacements';
+
+const rewardedEventEmitter =
+  Platform.OS === 'ios'
+    ? new NativeEventEmitter(NativeModules.RewardedAdModule)
+    : DeviceEventEmitter;
 
 export const RewardedAdScreen = ({
   navigation,
 }: {
   navigation: NavigationProp<any>;
 }) => {
+  const placementName = samplePlacementNames.rewarded;
   const [loadingRewardedAd, setLoadingRewardedAd] = useState(false);
   const [toastMessages, setToastMessages] = useState<string[]>([]);
 
   //Event Listener for Rewarded Ad
   useEffect(() => {
-    const onAdEvent = DeviceEventEmitter.addListener(
+    const onAdEvent = rewardedEventEmitter.addListener(
       EAdEvent.RewardedAdEvent,
       event => {
         const {event: eventType, message, error, reward} = event;
@@ -51,11 +62,6 @@ export const RewardedAdScreen = ({
           case ERewardedAdEventType.onAdImpression:
             console.log('Ad impression');
             showToastMessage('Rewarded Ad impression');
-            setToastMessages(prev => [...prev, message]);
-            break;
-          case ERewardedAdEventType.onAdRevenuePaid:
-            console.log('Ad Revenue Paid '+ event.revenue);
-            showToastMessage('Rewarded Ad Revenue Paid '+ event.revenue);
             setToastMessages(prev => [...prev, message]);
             break;
           case ERewardedAdEventType.onUserEarnedReward:
@@ -97,7 +103,8 @@ export const RewardedAdScreen = ({
     try {
       // setLoadingRewardedAd(true);
       setToastMessages([]);
-      await Adster.loadRewardedAd(testPlacementNames.rewarded);
+      logPlacementRequest('Rewarded', placementName);
+      await Adster.loadRewardedAd(placementName);
     } catch (error) {
       console.log('loadRewardedAd: Error', error);
     } finally {
@@ -109,7 +116,7 @@ export const RewardedAdScreen = ({
     setToastMessages([]);
     Adster.showRewardedAd()
       .then(() => {})
-      .catch(error => {
+      .catch((error: unknown) => {
         console.log('Error in showRewardedAd', error);
         showToastMessage('Error in showRewardedAd' + error);
         setToastMessages(prev => [...prev, 'Error in showRewardedAd:' + error]);
@@ -128,6 +135,7 @@ export const RewardedAdScreen = ({
         }}
       />
       <View style={styles.viewContainer}>
+        <PlacementInfo format="Rewarded" placement={placementName} />
         {loadingRewardedAd && (
           <ActivityIndicator size="large" color="#0000ff" />
         )}
