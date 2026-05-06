@@ -1,4 +1,4 @@
-// File: android/app/src/main/java/com/finaltest/AdSterModule.kt
+// File: android/app/src/main/java/com/finaltest/AdaptiveBannerModule.kt
 package com.finaltest
 
 import android.os.Build
@@ -6,15 +6,15 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View.MeasureSpec
 import com.facebook.react.bridge.*
-import com.adster.sdk.mediation.*
+import com.razorpay.sdk.mediation.*
 
-private const val TAG = "AdSterModule"
+private const val TAG = "AdaptiveBannerModule"
 
-class AdSterModule(
+class AdaptiveBannerModule(
   private val reactContext: ReactApplicationContext
 ) : ReactContextBaseJavaModule(reactContext) {
 
-  override fun getName(): String = "AdSterModule"
+  override fun getName(): String = "AdaptiveBannerModule"
 
   /** Calculate the *dp* width of the ad slot at runtime. */
   private fun calculateAdWidthDp(): Int {
@@ -59,11 +59,12 @@ class AdSterModule(
     Log.d(TAG, "  converting $widthDp dp → $widthPx px for measurement")
 
     val config = AdRequestConfiguration
+      .Companion
       .builder(reactContext, placementId)
       .addAnchoredAdaptiveBannerAdSize(widthDp)
       .build()
 
-    AdSterAdLoader.builder()
+    RazorpayAdLoader.builder()
       .withAdsListener(object : MediationAdListener() {
         override fun onBannerAdLoaded(ad: MediationBannerAd) {
           Log.d(TAG, "  onBannerAdLoaded")

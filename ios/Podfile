@@ -15,6 +15,10 @@ if linkage != nil
 end
 
 target 'FinalTest' do
+  pod 'RazorpayAdsSdk',
+      :git => 'https://github.com/razorpayads/ios-sdk.git',
+      :tag => '1.4.0'
+
   config = use_native_modules!
 
   use_react_native!(

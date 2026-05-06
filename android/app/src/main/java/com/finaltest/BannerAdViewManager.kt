@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.view.View
 import android.widget.FrameLayout
-import com.adster.sdk.mediation.*
+import com.razorpay.sdk.mediation.*
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
@@ -83,7 +83,7 @@ class BannerAdViewManager : SimpleViewManager<FrameLayout>() {
         val screenWidthDp = (screenWidthPx / metrics.density).toInt()
 
         // Build request
-        val builder = AdRequestConfiguration.builder(ctx, pid)
+        val builder = AdRequestConfiguration.Companion.builder(ctx, pid)
         if (mode == "inline") {
             val wDp = inlineWidthDp ?: (screenWidthDp * 0.6f).toInt()
             Log.d(TAG, "INLINE banner: widthDp=$wDp, maxHeight=250dp")
@@ -95,7 +95,7 @@ class BannerAdViewManager : SimpleViewManager<FrameLayout>() {
 
         val config = builder.build()
 
-        AdSterAdLoader.builder()
+        RazorpayAdLoader.builder()
             .withAdsListener(object : MediationAdListener() {
                 override fun onBannerAdLoaded(ad: MediationBannerAd) {
                     Log.d(TAG, "onBannerAdLoaded (mode=$mode), adding view")
@@ -117,6 +117,12 @@ class BannerAdViewManager : SimpleViewManager<FrameLayout>() {
                         }
                         ctx.getJSModule(RCTEventEmitter::class.java)
                             .receiveEvent(container.id, "onAdLoaded", payload)
+                    } ?: run {
+                        val payload = Arguments.createMap().apply {
+                            putString("error", "Banner ad returned no view")
+                        }
+                        ctx.getJSModule(RCTEventEmitter::class.java)
+                            .receiveEvent(container.id, "onAdFailedToLoad", payload)
                     }
                 }
 

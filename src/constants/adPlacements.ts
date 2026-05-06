@@ -7,12 +7,12 @@ const selectPlacement = (ios: string, android: string) =>
   }) as string;
 
 export const samplePlacementNames = {
-  banner: selectPlacement('adster_banner_320x50', 'Adster_Banner_Test'),
+  banner: selectPlacement('adster_banner_320x50', 'adster_banner_320x50'),
   banner320x50: selectPlacement('adster_banner_320x50', 'adster_banner_320x50'),
-  banner300x250: selectPlacement('adster_banner_300x250', 'gam_banner_0'),
-  interstitial: selectPlacement('adster_interstitial_test', 'Adster_Interstitial_Test'),
-  rewarded: selectPlacement('adster_rewarded_test', 'gam_rewarded_0'),
-  native: selectPlacement('adster_native_test', 'Adster_Native_Test'),
-  unified: selectPlacement('adster_unified_test', 'Adster_Unified_Test'),
+  banner300x250: selectPlacement('adster_banner_300x250', 'adster_banner_300x250'),
+  interstitial: selectPlacement('adster_interstitial_test', 'adster_interstitial_test'),
+  rewarded: selectPlacement('adster_rewarded_test', 'adster_rewarded_test'),
+  native: selectPlacement('adster_native_test', 'adster_native_test'),
+  unified: selectPlacement('adster_unified_test', 'adster_unified_test'),
   adaptiveBanner: selectPlacement('adster_banner_320x50', 'adster_banner_320x50'),
 } as const;

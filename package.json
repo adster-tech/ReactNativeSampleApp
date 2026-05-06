@@ -12,7 +12,7 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
-    "razorpay-ads-react-native": "2.4.2",
+    "razorpay-ads-react-native": "2.4.3",
     "clean": "^4.0.2",
     "react": "18.3.1",
     "react-native": "0.75.4",

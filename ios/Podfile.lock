@@ -1,10 +1,17 @@
 PODS:
-  - Adster (1.4.4)
-  - adster-react-native (2.4.2):
-    - Adster (= 1.4.4)
+  - boost (1.84.0)
+  - DoubleConversion (1.1.6)
+  - FBLazyVector (0.75.4)
+  - fmt (9.1.0)
+  - glog (0.3.5)
+  - hermes-engine (0.75.4):
+    - hermes-engine/Pre-built (= 0.75.4)
+  - hermes-engine/Pre-built (0.75.4)
+  - razorpay-react-native (2.4.2):
     - DoubleConversion
     - glog
     - hermes-engine
+    - RazorpayAdsSdk
     - RCT-Folly (= 2024.01.01.00)
     - RCTRequired
     - RCTTypeSafety
@@ -22,14 +29,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - boost (1.84.0)
-  - DoubleConversion (1.1.6)
-  - FBLazyVector (0.75.4)
-  - fmt (9.1.0)
-  - glog (0.3.5)
-  - hermes-engine (0.75.4):
-    - hermes-engine/Pre-built (= 0.75.4)
-  - hermes-engine/Pre-built (0.75.4)
+  - RazorpayAdsSdk (1.0.1)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1548,13 +1548,14 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - adster-react-native (from `../node_modules/adster-react-native-client`)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - razorpay-react-native (from `../node_modules/razorpay-ads-react-native`)
+  - RazorpayAdsSdk (from `https://github.com/razorpayads/ios-sdk.git`, tag `1.4.0`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -1618,12 +1619,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Adster
     - SocketRocket
 
 EXTERNAL SOURCES:
-  adster-react-native:
-    :path: "../node_modules/adster-react-native-client"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
@@ -1637,6 +1635,11 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2024-08-15-RNv0.75.1-4b3bf912cc0f705b51b71ce1a5b8bd79b93a451b
+  razorpay-react-native:
+    :path: "../node_modules/razorpay-ads-react-native"
+  RazorpayAdsSdk:
+    :git: https://github.com/razorpayads/ios-sdk.git
+    :tag: 1.4.0
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -1754,15 +1757,20 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
+CHECKOUT OPTIONS:
+  RazorpayAdsSdk:
+    :git: https://github.com/razorpayads/ios-sdk.git
+    :tag: 1.4.0
+
 SPEC CHECKSUMS:
-  Adster: 4b056bd9a642749035c61861960b9e8fa81d2ce4
-  adster-react-native: 4f37addc9dc64651cc9b3f73ec3baf5f73291507
   boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
+  razorpay-react-native: 7e7a8861512ab9c405154721ea547078e14145a2
+  RazorpayAdsSdk: 40b0f42a1be7312f2f6f0e57e46f59ee199f407a
   RCT-Folly: 34124ae2e667a0e5f0ea378db071d27548124321
   RCTDeprecation: 726d24248aeab6d7180dac71a936bbca6a994ed1
   RCTRequired: a94e7febda6db0345d207e854323c37e3a31d93b
@@ -1823,6 +1831,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 055f92ad73f8c8600a93f0e25ac0b2344c3b07e6
 
-PODFILE CHECKSUM: 08397a10a4df02bcb80277e1404a054be9904678
+PODFILE CHECKSUM: f3bbe1e676db09f79874817b33fe9f26d5e9cd94
 
 COCOAPODS: 1.16.2

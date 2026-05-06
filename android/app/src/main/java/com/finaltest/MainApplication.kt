@@ -15,10 +15,9 @@ class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
     object : DefaultReactNativeHost(this) {
-      // ← Replaced the single‑expression override with a block that adds AdsterPackage()
       override fun getPackages(): List<ReactPackage> {
         val packages = PackageList(this).packages.toMutableList()
-        packages.add(AdsterPackage())
+        packages.add(AdaptiveBannerPackage())
         return packages
       }
 

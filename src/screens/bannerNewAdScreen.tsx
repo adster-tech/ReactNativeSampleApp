@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
-  Platform,
 } from 'react-native';
 import { Header } from '../components/header';
 import { NavigationProp } from '@react-navigation/native';
@@ -138,8 +137,8 @@ const styles = StyleSheet.create({
   },
   bannerContainer: {
     marginVertical: 20,
-    width: Platform.OS === 'ios' ? 300 : 320,
-    height: Platform.OS === 'ios' ? 250 : 50,
+    width: 300,
+    height: 250,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'green',

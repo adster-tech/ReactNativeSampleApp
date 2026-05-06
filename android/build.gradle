@@ -16,17 +16,10 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }
-     allprojects {
+    allprojects {
         repositories {
             google()
             mavenCentral()
-            maven {
-                url = uri("https://maven.pkg.github.com/adster-tech/orchestration-sdk")
-                credentials {
-                    username = "github_username"
-                    password = "github_password"
-                }
-            }
         }
     }
 }

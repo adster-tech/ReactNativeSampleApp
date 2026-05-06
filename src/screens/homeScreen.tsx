@@ -9,7 +9,6 @@ import {
 import { Button } from '../components/button';
 import { Header } from '../components/header';
 import { NavigationProp } from '@react-navigation/native';
-import { showToastMessage } from '../utils/showToastMessage';
 
 export const HomeScreen = ({
   navigation,
