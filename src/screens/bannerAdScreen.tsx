@@ -67,7 +67,7 @@ export const BannerAdScreen = ({
         <BannerAdView
           key={`banner-${adKey}`}
           bannerContainerStyle={styles.bannerContainer}
-          placementName={testPlacementNames.banner}
+          placementName={'adster_banner_320x50'}
           onAdLoaded={(event: BannerAdEvent) => {
             const message = event.nativeEvent.message;
             console.log('Ad loaded:', message);
